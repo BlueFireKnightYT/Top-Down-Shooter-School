@@ -18,7 +18,7 @@ public class rotateToMouse : MonoBehaviour
         // richting van de speler tot de muis
         Vector2 direction = mousePos - rb.position;
         // bereken de rotatie voor de speler
-        float rotatie = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float rotatie = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
         // zet rotatie van speler
         rb.rotation = rotatie;
     }
