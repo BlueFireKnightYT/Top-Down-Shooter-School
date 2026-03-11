@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerShooting : MonoBehaviour
 {
     public GameObject muzzleFlashLight;
+    public GameObject gunFlash;
     public Transform shootPoint;
 
     public float shootCooldown;
@@ -23,6 +24,7 @@ public class PlayerShooting : MonoBehaviour
             isShooting = false;
             StopAllCoroutines();
             muzzleFlashLight.SetActive(false);
+            gunFlash.SetActive(false);
         }
     }
 
@@ -34,8 +36,10 @@ public class PlayerShooting : MonoBehaviour
 
             //Muzzle flash
             muzzleFlashLight.SetActive(true);
+            gunFlash.SetActive(true);
             yield return new WaitForSeconds(.1f);
             muzzleFlashLight.SetActive(false);
+            gunFlash.SetActive(false);
 
             //wachten voor nieuwe kogel
             yield return new WaitForSeconds(shootCooldown);
