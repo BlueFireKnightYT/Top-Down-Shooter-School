@@ -13,6 +13,7 @@ public class PlayerShooting : MonoBehaviour
 
     public LayerMask excludedLayer;
     bool isShooting = false;
+    bool coolingDown;
 
     public TrailRenderer trailPrefab;
     public float bulletSpeed = 100f;
@@ -27,10 +28,11 @@ public class PlayerShooting : MonoBehaviour
 
     public void ShootInput(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !coolingDown)
         {
             isShooting = true;
             StartCoroutine(Shoot());
+            coolingDown = true;
         }
         if (context.canceled)
         {
@@ -45,6 +47,7 @@ public class PlayerShooting : MonoBehaviour
     {
         while (isShooting)
         {
+            coolingDown = true;
             Vector3 targetPoint;
             RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, shootPoint.up, bulletTravelLength, ~excludedLayer);
 
@@ -64,10 +67,11 @@ public class PlayerShooting : MonoBehaviour
             muzzleFlashLight.SetActive(true);
             gunFlash.SetActive(true);
             yield return new WaitForSeconds(0.1f);
-            muzzleFlashLight.SetActive(false);
             gunFlash.SetActive(false);
+            muzzleFlashLight.SetActive(false);
 
             yield return new WaitForSeconds(shootCooldown);
+            coolingDown = false;
         }
     }
 
