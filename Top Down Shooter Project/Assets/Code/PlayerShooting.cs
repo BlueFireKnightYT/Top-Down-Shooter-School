@@ -17,6 +17,9 @@ public class PlayerShooting : MonoBehaviour
     public TrailRenderer trailPrefab;
     public float bulletSpeed = 100f;
 
+
+    public int damage = 10;
+
     private void Update()
     {
         Debug.DrawRay(shootPoint.position, shootPoint.up * bulletTravelLength);
@@ -48,7 +51,7 @@ public class PlayerShooting : MonoBehaviour
             if (hit.collider != null)
             {
                 targetPoint = hit.point;
-                Debug.Log(hit.collider.gameObject.name);
+                DealDamage(hit.collider.gameObject);
             }
             else
             {
@@ -60,11 +63,25 @@ public class PlayerShooting : MonoBehaviour
 
             muzzleFlashLight.SetActive(true);
             gunFlash.SetActive(true);
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(0.1f);
             muzzleFlashLight.SetActive(false);
             gunFlash.SetActive(false);
 
             yield return new WaitForSeconds(shootCooldown);
+        }
+    }
+
+
+
+    void DealDamage(GameObject target)
+    {
+        if (target.CompareTag("Enemy"))
+        {
+            EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+            }
         }
     }
 
