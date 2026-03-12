@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyWaypointSystem : MonoBehaviour
 {
@@ -8,30 +9,44 @@ public class EnemyWaypointSystem : MonoBehaviour
 
     // Player
     private Transform player;
-    [SerializeField] private float DisToMove = 5;
+    [SerializeField] private float disToMove = 5;
+
+    float baseDisToMove;
+    float followDisToMove;
 
     // Enemy Stats
-    [SerializeField] private float enemySpeed = 2f;
+    [SerializeField] private float baseEnemySpeed = 3f;
+    private float enemySpeed = 3f;
+    [SerializeField] private float enemyChasingSpeed = 4.5f;
 
     private bool isChasing = false;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        enemySpeed = baseEnemySpeed;
+
+        baseDisToMove = disToMove;
+        followDisToMove = disToMove * 2;
     }
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.position);
 
-        // Check of enemy moet chasen of waypoints
-        if (distance < DisToMove)
+        // Checks if enemy neeeds to chase or use waypoints
+        if (distance < disToMove)
+        { 
             isChasing = true;
-        else
-            isChasing = false;
-
-        if (isChasing)
+            enemySpeed = enemyChasingSpeed;
+            disToMove = followDisToMove;
             ChasePlayer();
+        }
         else
+        { 
+            isChasing = false;
+            enemySpeed = baseEnemySpeed;
+            disToMove = baseDisToMove;
             Move();
+        }          
     }
 
     // waypoints

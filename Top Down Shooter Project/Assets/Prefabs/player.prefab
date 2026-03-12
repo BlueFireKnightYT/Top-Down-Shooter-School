@@ -322,6 +322,12 @@ MonoBehaviour:
   shootPoint: {fileID: 2136166093908379336}
   bulletTravelLength: 999
   shootCooldown: 0.1
+  excludedLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  trailPrefab: {fileID: 2624127919771283943, guid: 368cf47b52f26ae46aaa4eae3814e11c, type: 3}
+  bulletSpeed: 100
+  damage: 10
 --- !u!1 &2241017819922987977
 GameObject:
   m_ObjectHideFlags: 0
