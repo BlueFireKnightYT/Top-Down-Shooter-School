@@ -320,6 +320,7 @@ MonoBehaviour:
   muzzleFlashLight: {fileID: 6065111297525580383}
   gunFlash: {fileID: 5934294955668159534}
   shootPoint: {fileID: 2136166093908379336}
+  bulletTravelLength: 999
   shootCooldown: 0.1
 --- !u!1 &2241017819922987977
 GameObject:
