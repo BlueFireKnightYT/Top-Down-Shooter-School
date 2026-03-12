@@ -3,12 +3,16 @@ using UnityEngine;
 public class CamTrigger : MonoBehaviour
 {
     GameObject player;
-    public CamMoveScript camMoveScript;
+    GameObject cam;
+
+    CamMoveScript camMoveScript;
     public int TriggerNumber;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        cam = GameObject.FindGameObjectWithTag("MainCamera");
+        camMoveScript = cam.GetComponent<CamMoveScript>();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

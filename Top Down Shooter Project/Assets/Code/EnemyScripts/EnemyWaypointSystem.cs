@@ -7,14 +7,17 @@ public class EnemyWaypointSystem : MonoBehaviour
     [SerializeField] int waypointIndex = 0;
 
     // Player
-    [SerializeField] private Transform player;
+    private Transform player;
     [SerializeField] private float DisToMove = 5;
 
     // Enemy Stats
     [SerializeField] private float enemySpeed = 2f;
 
     private bool isChasing = false;
-
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.position);
