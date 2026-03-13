@@ -19,7 +19,6 @@ public class EnemyWaypointSystem : MonoBehaviour
     private float enemySpeed = 3f;
     [SerializeField] private float enemyChasingSpeed = 4.5f;
 
-    private bool isChasing = false;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -35,14 +34,12 @@ public class EnemyWaypointSystem : MonoBehaviour
         // Checks if enemy neeeds to chase or use waypoints
         if (distance < disToMove)
         { 
-            isChasing = true;
             enemySpeed = enemyChasingSpeed;
             disToMove = followDisToMove;
             ChasePlayer();
         }
         else
         { 
-            isChasing = false;
             enemySpeed = baseEnemySpeed;
             disToMove = baseDisToMove;
             Move();
