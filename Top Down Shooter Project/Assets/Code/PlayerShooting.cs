@@ -55,6 +55,8 @@ public class PlayerShooting : MonoBehaviour
             {
                 targetPoint = hit.point;
                 DealDamage(hit.collider.gameObject);
+                string hitName = hit.collider.name;
+                Debug.Log(hitName);
             }
             else
             {
