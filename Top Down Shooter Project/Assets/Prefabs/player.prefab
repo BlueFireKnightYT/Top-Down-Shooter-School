@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5668592571774845828}
   - component: {fileID: 3638466916656800404}
   - component: {fileID: 536761913918298004}
+  - component: {fileID: 2863388667743413867}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -328,6 +329,20 @@ MonoBehaviour:
   trailPrefab: {fileID: 2624127919771283943, guid: 368cf47b52f26ae46aaa4eae3814e11c, type: 3}
   bulletSpeed: 100
   damage: 10
+--- !u!114 &2863388667743413867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735394083189908229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07ebeca0d54f04a40ac12c50e4966d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  currentHealth: 100
 --- !u!1 &2241017819922987977
 GameObject:
   m_ObjectHideFlags: 0
