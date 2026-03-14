@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     public int currentHealth;
+
+    public Slider hpBar;
 
     void Start()
     {
@@ -15,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log("Player Health: " + currentHealth);
+        UpdateHPBar();
 
         if (currentHealth <= 0)
         {
@@ -27,5 +31,10 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player died!");
         //reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void UpdateHPBar()
+    {
+        hpBar.value = currentHealth;
     }
 }
