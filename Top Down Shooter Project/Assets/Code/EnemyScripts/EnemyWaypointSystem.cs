@@ -1,54 +1,50 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class EnemyWaypointSystem : MonoBehaviour
 {
-    // Waypoints
     [SerializeField] Vector3[] waypoints;
     [SerializeField] int waypointIndex = 0;
 
-    // Player
-    private Transform player;
-    [SerializeField] private float disToMove = 5;
+    [SerializeField] LayerMask playerLayer;
+    [SerializeField] LayerMask obstacleLayer;
+    [SerializeField] float detectionRange = 5f;
 
-    float baseDisToMove;
-    float followDisToMove;
+    [SerializeField] float baseEnemySpeed = 3f;
+    [SerializeField] float enemyChasingSpeed = 4.5f;
+    float enemySpeed;
 
-    // Enemy Stats
-    [SerializeField] private float baseEnemySpeed = 3f;
-    private float enemySpeed = 3f;
-    [SerializeField] private float enemyChasingSpeed = 4.5f;
+    Transform player;
 
-    private void Start()
+    void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         enemySpeed = baseEnemySpeed;
-
-        baseDisToMove = disToMove;
-        followDisToMove = disToMove * 2;
     }
+
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        Vector2 directionToPlayer = (player.position - transform.position).normalized;
 
-        // Checks if enemy neeeds to chase or use waypoints
-        if (distance < disToMove)
-        { 
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, detectionRange, playerLayer | obstacleLayer);
+
+        Debug.DrawRay(transform.position, directionToPlayer * detectionRange, Color.red);
+
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
             enemySpeed = enemyChasingSpeed;
-            disToMove = followDisToMove;
             ChasePlayer();
         }
         else
-        { 
+        {
             enemySpeed = baseEnemySpeed;
-            disToMove = baseDisToMove;
             Move();
-        }          
+        }
     }
 
-    // waypoints
-    private void Move()
+    void Move()
     {
+        if (waypoints.Length == 0) return;
+
         if (waypointIndex < waypoints.Length)
         {
             Vector3 direction = (waypoints[waypointIndex] - transform.position).normalized;
@@ -57,7 +53,7 @@ public class EnemyWaypointSystem : MonoBehaviour
 
             transform.position = Vector3.MoveTowards(transform.position, waypoints[waypointIndex], enemySpeed * Time.deltaTime);
 
-            if (transform.position == waypoints[waypointIndex])
+            if (Vector3.Distance(transform.position, waypoints[waypointIndex]) < 0.1f)
                 waypointIndex++;
         }
         else
@@ -66,9 +62,14 @@ public class EnemyWaypointSystem : MonoBehaviour
         }
     }
 
-    //chase player
-    private void ChasePlayer()
+    void ChasePlayer()
     {
+        float distance = Vector2.Distance(transform.position, player.transform.position);
+        if (distance > detectionRange)
+        {
+            Move();
+            return;
+        }
         Vector3 direction = (player.position - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
