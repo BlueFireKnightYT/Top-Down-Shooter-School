@@ -33,7 +33,7 @@ public class PlayerHealth : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void UpdateHPBar()
+    public void UpdateHPBar()
     {
         hpBar.value = currentHealth;
     }
