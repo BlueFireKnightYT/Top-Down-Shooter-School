@@ -29,7 +29,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Player died!");
         //reload current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("DeathScene");
     }
 
     public void UpdateHPBar()
