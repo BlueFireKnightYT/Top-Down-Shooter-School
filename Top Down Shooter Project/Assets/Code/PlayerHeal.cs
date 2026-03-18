@@ -28,7 +28,6 @@ public class PlayerHeal : MonoBehaviour
                 medkits++;
                 UpdateMedkitText();
                 Destroy(hit.gameObject);
-                Debug.Log(medkits);
             }
         }
     }

@@ -12,12 +12,15 @@ public class PlayerShooting : MonoBehaviour
     public float shootCooldown;
 
     public LayerMask excludedLayer;
+    bool canShoot;
     bool isShooting = false;
     bool coolingDown;
 
     public TrailRenderer trailPrefab;
     public float bulletSpeed = 100f;
 
+    public int maxAmmo;
+    public int currentAmmo;
 
     public int damage = 10;
 
@@ -28,7 +31,7 @@ public class PlayerShooting : MonoBehaviour
 
     public void ShootInput(InputAction.CallbackContext context)
     {
-        if (context.started && !coolingDown)
+        if (context.started && !coolingDown && canShoot)
         {
             isShooting = true;
             StartCoroutine(Shoot());
@@ -47,6 +50,7 @@ public class PlayerShooting : MonoBehaviour
     {
         while (isShooting)
         {
+            changeAmmo();
             coolingDown = true;
             Vector3 targetPoint;
             RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, shootPoint.up, bulletTravelLength, ~excludedLayer);
@@ -56,7 +60,6 @@ public class PlayerShooting : MonoBehaviour
                 targetPoint = hit.point;
                 DealDamage(hit.collider.gameObject);
                 string hitName = hit.collider.name;
-                Debug.Log(hitName);
             }
             else
             {
@@ -84,9 +87,13 @@ public class PlayerShooting : MonoBehaviour
         if (target.CompareTag("Enemy"))
         {
             EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
+            EnemyWaypointSystem EWS = target.GetComponent<EnemyWaypointSystem>();
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(damage);
+                StopCoroutine(EWS.WaitAfterHit());
+                EWS.isHit = true;
+                StartCoroutine(EWS.WaitAfterHit());
             }
         }
     }
@@ -106,5 +113,26 @@ public class PlayerShooting : MonoBehaviour
 
         trail.transform.position = hitPoint;
         Destroy(trail.gameObject, trail.time);
+    }
+
+    public IEnumerator reload()
+    {
+        yield return new WaitForSeconds(5);
+        currentAmmo = maxAmmo;
+        canShoot = true;
+        StopCoroutine(reload());
+    }
+
+    void changeAmmo()
+    {
+        if (currentAmmo > 0)
+        { 
+            currentAmmo--;
+        }
+        else
+        {
+            canShoot = false;
+        }
+        Debug.Log("Ammo: " + currentAmmo);
     }
 }
