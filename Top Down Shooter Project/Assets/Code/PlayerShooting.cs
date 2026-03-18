@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,7 @@ public class PlayerShooting : MonoBehaviour
     public GameObject muzzleFlashLight;
     public GameObject gunFlash;
     public Transform shootPoint;
+    public TextMeshProUGUI ammoText;
 
     public float bulletTravelLength;
     public float shootCooldown;
@@ -14,6 +16,7 @@ public class PlayerShooting : MonoBehaviour
     public LayerMask excludedLayer;
     bool canShoot = true;
     bool isShooting = false;
+    bool reloading = false;
     bool coolingDown = false;
 
     public TrailRenderer trailPrefab;
@@ -24,16 +27,16 @@ public class PlayerShooting : MonoBehaviour
 
     public int damage = 10;
 
+    private void Start()
+    {
+        UpdateAmmoText();
+    }
     private void Update()
     {
         Debug.DrawRay(shootPoint.position, shootPoint.up * bulletTravelLength);
         if (currentAmmo == 0)
         {
-            canShoot = false;
-            isShooting = false;
-            StopCoroutine(Shoot());
-            muzzleFlashLight.SetActive(false);
-            gunFlash.SetActive(false);
+            StopShooting();
         }
     }
 
@@ -47,9 +50,7 @@ public class PlayerShooting : MonoBehaviour
         }
         if (context.canceled)
         {
-            isShooting = false;
-            muzzleFlashLight.SetActive(false);
-            gunFlash.SetActive(false);
+            StopShooting();
         }
     }
 
@@ -124,22 +125,44 @@ public class PlayerShooting : MonoBehaviour
 
     public void reloadAmmo()
     {
-        StartCoroutine(reload());
+        if (!reloading)
+        { 
+            StartCoroutine(reload());
+            reloading = true;
+        }
     }
 
     IEnumerator reload()
     {
+        StopShooting();
+        canShoot = false;
+
         yield return new WaitForSeconds(5);
         currentAmmo = maxAmmo;
         canShoot = true;
+        reloading = false;
+        UpdateAmmoText();
     }
 
+    void StopShooting()
+    {
+        isShooting = false;
+        StopCoroutine(Shoot());
+        muzzleFlashLight.SetActive(false);
+        gunFlash.SetActive(false);
+    }
     void changeAmmo()
     {
         if (currentAmmo > 0)
         { 
             currentAmmo--;
+            UpdateAmmoText();
         }
         Debug.Log("Ammo: " + currentAmmo);
+    }
+
+    void UpdateAmmoText()
+    {
+        ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
     }
 }
