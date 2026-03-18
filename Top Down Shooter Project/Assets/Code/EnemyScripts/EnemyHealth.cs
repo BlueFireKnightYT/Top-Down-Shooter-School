@@ -13,7 +13,6 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log("Enemy Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -23,7 +22,6 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Enemy died!");
         Destroy(gameObject);
     }
 }

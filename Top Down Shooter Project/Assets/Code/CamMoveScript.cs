@@ -2,16 +2,7 @@ using UnityEngine;
 
 public class CamMoveScript : MonoBehaviour
 {
-
-    //public Vector3[] cameraPositions;
-    //public int targetPos = 0;
-
-    //private void FixedUpdate()
-    //{
-    //    transform.position = Vector3.Lerp(transform.position, cameraPositions[targetPos], 5 * Time.deltaTime);
-    //}
     GameObject player;
-    float playerPosY;
     public float lerpSpeed;
 
     private void Start()
@@ -20,8 +11,7 @@ public class CamMoveScript : MonoBehaviour
     }
     private void Update()
     {
-        playerPosY = player.transform.position.y;
-        Vector3 nextCamPos = new Vector3(0, playerPosY, -10);
+        Vector3 nextCamPos = new Vector3(player.transform.position.x, player.transform.position.y, -10);
 
         transform.position = Vector3.Lerp(transform.position, nextCamPos, lerpSpeed * Time.deltaTime);
     }

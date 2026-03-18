@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyWaypointSystem : MonoBehaviour
@@ -12,6 +13,7 @@ public class EnemyWaypointSystem : MonoBehaviour
     [SerializeField] float baseEnemySpeed = 3f;
     [SerializeField] float enemyChasingSpeed = 4.5f;
     float enemySpeed;
+    public bool isHit = false;
 
     Transform player;
 
@@ -29,15 +31,23 @@ public class EnemyWaypointSystem : MonoBehaviour
 
         Debug.DrawRay(transform.position, directionToPlayer * detectionRange, Color.red);
 
-        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        if ((hit.collider != null && hit.collider.CompareTag("Player")))
         {
             enemySpeed = enemyChasingSpeed;
             ChasePlayer();
         }
-        else
+        else if (!isHit)
         {
             enemySpeed = baseEnemySpeed;
             Move();
+        }
+
+        if(isHit)
+        {
+            enemySpeed = enemyChasingSpeed;
+            ChasePlayer();
+            StopCoroutine(WaitAfterHit());
+            StartCoroutine(WaitAfterHit());
         }
     }
 
@@ -65,7 +75,7 @@ public class EnemyWaypointSystem : MonoBehaviour
     void ChasePlayer()
     {
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance > detectionRange)
+        if (distance > detectionRange && !isHit)
         {
             Move();
             return;
@@ -75,5 +85,11 @@ public class EnemyWaypointSystem : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
         transform.position = Vector3.MoveTowards(transform.position, player.position, enemySpeed * Time.deltaTime);
+    }
+
+    public IEnumerator WaitAfterHit()
+    {
+        yield return new WaitForSeconds(5f);
+        isHit = false;
     }
 }

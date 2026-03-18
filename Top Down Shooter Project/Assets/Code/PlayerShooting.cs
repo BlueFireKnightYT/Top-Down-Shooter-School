@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,28 +8,41 @@ public class PlayerShooting : MonoBehaviour
     public GameObject muzzleFlashLight;
     public GameObject gunFlash;
     public Transform shootPoint;
+    public TextMeshProUGUI ammoText;
 
     public float bulletTravelLength;
     public float shootCooldown;
 
     public LayerMask excludedLayer;
+    bool canShoot = true;
     bool isShooting = false;
-    bool coolingDown;
+    bool reloading = false;
+    bool coolingDown = false;
 
     public TrailRenderer trailPrefab;
     public float bulletSpeed = 100f;
 
+    public int maxAmmo;
+    public int currentAmmo;
 
     public int damage = 10;
 
+    private void Start()
+    {
+        UpdateAmmoText();
+    }
     private void Update()
     {
         Debug.DrawRay(shootPoint.position, shootPoint.up * bulletTravelLength);
+        if (currentAmmo == 0)
+        {
+            StopShooting();
+        }
     }
 
     public void ShootInput(InputAction.CallbackContext context)
     {
-        if (context.started && !coolingDown)
+        if (context.started && !coolingDown && canShoot)
         {
             isShooting = true;
             StartCoroutine(Shoot());
@@ -36,10 +50,7 @@ public class PlayerShooting : MonoBehaviour
         }
         if (context.canceled)
         {
-            isShooting = false;
-            StopCoroutine(Shoot());
-            muzzleFlashLight.SetActive(false);
-            gunFlash.SetActive(false);
+            StopShooting();
         }
     }
 
@@ -47,6 +58,7 @@ public class PlayerShooting : MonoBehaviour
     {
         while (isShooting)
         {
+            changeAmmo();
             coolingDown = true;
             Vector3 targetPoint;
             RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, shootPoint.up, bulletTravelLength, ~excludedLayer);
@@ -56,7 +68,6 @@ public class PlayerShooting : MonoBehaviour
                 targetPoint = hit.point;
                 DealDamage(hit.collider.gameObject);
                 string hitName = hit.collider.name;
-                Debug.Log(hitName);
             }
             else
             {
@@ -84,9 +95,13 @@ public class PlayerShooting : MonoBehaviour
         if (target.CompareTag("Enemy"))
         {
             EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
+            EnemyWaypointSystem EWS = target.GetComponent<EnemyWaypointSystem>();
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(damage);
+                StopCoroutine(EWS.WaitAfterHit());
+                EWS.isHit = true;
+                StartCoroutine(EWS.WaitAfterHit());
             }
         }
     }
@@ -106,5 +121,48 @@ public class PlayerShooting : MonoBehaviour
 
         trail.transform.position = hitPoint;
         Destroy(trail.gameObject, trail.time);
+    }
+
+    public void reloadAmmo()
+    {
+        if (!reloading)
+        { 
+            StartCoroutine(reload());
+            reloading = true;
+        }
+    }
+
+    IEnumerator reload()
+    {
+        StopShooting();
+        canShoot = false;
+
+        yield return new WaitForSeconds(5);
+        currentAmmo = maxAmmo;
+        canShoot = true;
+        reloading = false;
+        UpdateAmmoText();
+    }
+
+    void StopShooting()
+    {
+        isShooting = false;
+        StopCoroutine(Shoot());
+        muzzleFlashLight.SetActive(false);
+        gunFlash.SetActive(false);
+    }
+    void changeAmmo()
+    {
+        if (currentAmmo > 0)
+        { 
+            currentAmmo--;
+            UpdateAmmoText();
+        }
+        Debug.Log("Ammo: " + currentAmmo);
+    }
+
+    void UpdateAmmoText()
+    {
+        ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
     }
 }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3638466916656800404}
   - component: {fileID: 536761913918298004}
   - component: {fileID: 2863388667743413867}
+  - component: {fileID: 1420857998825072395}
   m_Layer: 8
   m_Name: player
   m_TagString: Player
@@ -213,6 +214,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 957707c7-e1d8-4077-a940-1ba3c8ba049b
     m_ActionName: 'Player/Shoot[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1420857998825072395}
+        m_TargetAssemblyTypeName: PlayerHeal, Assembly-CSharp
+        m_MethodName: PickUpItems
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3e3177bf-31c4-4bbd-8869-28020ede26f9
+    m_ActionName: 'Player/PickUp[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1420857998825072395}
+        m_TargetAssemblyTypeName: PlayerHeal, Assembly-CSharp
+        m_MethodName: UseMedkit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fd4c731e-01f7-4e51-bc95-81869ef93eff
+    m_ActionName: 'Player/UseMedKit[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 536761913918298004}
+        m_TargetAssemblyTypeName: PlayerShooting, Assembly-CSharp
+        m_MethodName: reloadAmmo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cc7a80dd-4e22-4c6a-8873-46da55a67b87
+    m_ActionName: 'Player/Reload[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -321,13 +370,16 @@ MonoBehaviour:
   muzzleFlashLight: {fileID: 6065111297525580383}
   gunFlash: {fileID: 5934294955668159534}
   shootPoint: {fileID: 2136166093908379336}
+  ammoText: {fileID: 0}
   bulletTravelLength: 999
   shootCooldown: 0.1
   excludedLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   trailPrefab: {fileID: 2624127919771283943, guid: 368cf47b52f26ae46aaa4eae3814e11c, type: 3}
   bulletSpeed: 100
+  maxAmmo: 10
+  currentAmmo: 10
   damage: 10
 --- !u!114 &2863388667743413867
 MonoBehaviour:
@@ -344,6 +396,24 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   hpBar: {fileID: 0}
+--- !u!114 &1420857998825072395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735394083189908229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31cf971790501064b9d239bd10200d0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  medkitText: {fileID: 0}
+  pickupLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  pickupRange: 5
+  addedHP: 30
 --- !u!1 &2241017819922987977
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,7 +439,7 @@ Transform:
   m_GameObject: {fileID: 2241017819922987977}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.672, z: 0}
+  m_LocalPosition: {x: 0, y: -0.616, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -401,7 +471,7 @@ Transform:
   m_GameObject: {fileID: 2973353808323177591}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: 1.072, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -626,7 +696,7 @@ Transform:
   m_GameObject: {fileID: 5934294955668159534}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.49, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7299998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -710,7 +780,7 @@ Transform:
   m_GameObject: {fileID: 6065111297525580383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.49, z: 0}
+  m_LocalPosition: {x: 0, y: 0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

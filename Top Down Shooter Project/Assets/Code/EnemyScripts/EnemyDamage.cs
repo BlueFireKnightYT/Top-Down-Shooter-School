@@ -8,10 +8,12 @@ public class EnemyDamage : MonoBehaviour
 
     private float AttackSpeed = 0.2f;
     private Transform player;
+    PlayerHealth ph;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        ph = player.GetComponent<PlayerHealth>();
     }
 
     void Update()
@@ -22,8 +24,6 @@ public class EnemyDamage : MonoBehaviour
 
         if (distance <= attackRange && Time.time >= AttackSpeed)
         {
-            PlayerHealth ph = player.GetComponent<PlayerHealth>();
-
             if (ph != null)
             {
                 ph.TakeDamage(damage);
