@@ -46,6 +46,8 @@ public class EnemyWaypointSystem : MonoBehaviour
         {
             enemySpeed = enemyChasingSpeed;
             ChasePlayer();
+            StopCoroutine(WaitAfterHit());
+            StartCoroutine(WaitAfterHit());
         }
     }
 
@@ -73,7 +75,7 @@ public class EnemyWaypointSystem : MonoBehaviour
     void ChasePlayer()
     {
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance > detectionRange)
+        if (distance > detectionRange && !isHit)
         {
             Move();
             return;

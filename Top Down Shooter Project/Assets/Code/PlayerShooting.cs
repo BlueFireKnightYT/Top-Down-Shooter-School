@@ -12,9 +12,9 @@ public class PlayerShooting : MonoBehaviour
     public float shootCooldown;
 
     public LayerMask excludedLayer;
-    bool canShoot;
+    bool canShoot = true;
     bool isShooting = false;
-    bool coolingDown;
+    bool coolingDown = false;
 
     public TrailRenderer trailPrefab;
     public float bulletSpeed = 100f;
@@ -27,6 +27,14 @@ public class PlayerShooting : MonoBehaviour
     private void Update()
     {
         Debug.DrawRay(shootPoint.position, shootPoint.up * bulletTravelLength);
+        if (currentAmmo == 0)
+        {
+            canShoot = false;
+            isShooting = false;
+            StopCoroutine(Shoot());
+            muzzleFlashLight.SetActive(false);
+            gunFlash.SetActive(false);
+        }
     }
 
     public void ShootInput(InputAction.CallbackContext context)
@@ -40,7 +48,6 @@ public class PlayerShooting : MonoBehaviour
         if (context.canceled)
         {
             isShooting = false;
-            StopCoroutine(Shoot());
             muzzleFlashLight.SetActive(false);
             gunFlash.SetActive(false);
         }
@@ -115,12 +122,16 @@ public class PlayerShooting : MonoBehaviour
         Destroy(trail.gameObject, trail.time);
     }
 
-    public IEnumerator reload()
+    public void reloadAmmo()
+    {
+        StartCoroutine(reload());
+    }
+
+    IEnumerator reload()
     {
         yield return new WaitForSeconds(5);
         currentAmmo = maxAmmo;
         canShoot = true;
-        StopCoroutine(reload());
     }
 
     void changeAmmo()
@@ -128,10 +139,6 @@ public class PlayerShooting : MonoBehaviour
         if (currentAmmo > 0)
         { 
             currentAmmo--;
-        }
-        else
-        {
-            canShoot = false;
         }
         Debug.Log("Ammo: " + currentAmmo);
     }
