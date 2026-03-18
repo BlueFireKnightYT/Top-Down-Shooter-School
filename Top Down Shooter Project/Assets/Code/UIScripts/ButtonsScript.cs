@@ -12,6 +12,7 @@ public class ButtonsScript : MonoBehaviour
     public TextMeshProUGUI ControlText;
     public Light2D ControlSpot;
     public Light2D ExtraSpotlight;
+    
 
     [Header("Instellingen voor glitches")]
     public float minSchudTijd = 0.2f;
@@ -91,6 +92,14 @@ public class ButtonsScript : MonoBehaviour
             yield return new WaitForSeconds(extraGlitchInterval);
         }
     }
+
+
+    // Return to menu
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
 
     // Start 
     public void StartGame()
