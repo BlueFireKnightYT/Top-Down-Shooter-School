@@ -14,6 +14,7 @@ public class EnemyWaypointSystem : MonoBehaviour
     [SerializeField] float enemyChasingSpeed = 4.5f;
     float enemySpeed;
     public bool isHit = false;
+    bool canMove = true;
 
     Transform player;
 
@@ -25,6 +26,14 @@ public class EnemyWaypointSystem : MonoBehaviour
 
     void Update()
     {
+        float disToPlayer = Vector2.Distance(transform.position, player.transform.position);
+        canMove = (disToPlayer > 1.9f);
+
+        if (!canMove)
+        {
+            return;
+        }
+
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, detectionRange, playerLayer | obstacleLayer);
@@ -42,12 +51,10 @@ public class EnemyWaypointSystem : MonoBehaviour
             Move();
         }
 
-        if(isHit)
+        if (isHit)
         {
             enemySpeed = enemyChasingSpeed;
             ChasePlayer();
-            StopCoroutine(WaitAfterHit());
-            StartCoroutine(WaitAfterHit());
         }
     }
 
@@ -85,6 +92,16 @@ public class EnemyWaypointSystem : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
         transform.position = Vector3.MoveTowards(transform.position, player.position, enemySpeed * Time.deltaTime);
+    }
+
+    // This method handles starting the hit timer once
+    public void OnTakeDamage()
+    {
+        if (!isHit)
+        {
+            isHit = true;
+            StartCoroutine(WaitAfterHit());
+        }
     }
 
     public IEnumerator WaitAfterHit()

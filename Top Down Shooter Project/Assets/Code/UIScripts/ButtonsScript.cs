@@ -97,7 +97,7 @@ public class ButtonsScript : MonoBehaviour
     // Return to menu
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("StartMenu");
     }
 
 
