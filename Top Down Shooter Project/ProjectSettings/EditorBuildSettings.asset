@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/StartMenu.unity
     guid: e72aa45083f901849b3dd202dae665d8
@@ -17,12 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DeathScene.unity
     guid: 3a7d108ecda16c44895f5ab2e3a896ed
+  - enabled: 1
+    path: Assets/Scenes/WinScene.unity
+    guid: 5dbcd7525a00bd2488cbdc71c5f953fc
   - enabled: 0
     path: Assets/Scenes/BackupScene.unity
     guid: 9150b5f8cb285644abd239227cedca18
-  - enabled: 0
-    path: Assets/Scenes/Record Scene.unity
-    guid: c6d369aa0ef42664aaf2df467ed01728
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
