@@ -15,9 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene 1.unity
     guid: f408d89f0c38ab04798c4d30010e797a
   - enabled: 1
+    path: Assets/Scenes/DeathScene.unity
+    guid: 3a7d108ecda16c44895f5ab2e3a896ed
+  - enabled: 0
     path: Assets/Scenes/BackupScene.unity
     guid: 9150b5f8cb285644abd239227cedca18
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Record Scene.unity
     guid: c6d369aa0ef42664aaf2df467ed01728
   m_configObjects:

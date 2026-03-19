@@ -37,6 +37,7 @@ public class PlayerShooting : MonoBehaviour
         if (currentAmmo == 0)
         {
             StopShooting();
+            canShoot = false;
         }
     }
 
@@ -137,7 +138,7 @@ public class PlayerShooting : MonoBehaviour
         StopShooting();
         canShoot = false;
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         currentAmmo = maxAmmo;
         canShoot = true;
         reloading = false;
